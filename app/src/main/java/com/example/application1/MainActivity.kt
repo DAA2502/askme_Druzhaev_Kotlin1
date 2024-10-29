@@ -1,6 +1,7 @@
 package com.example.application1
 
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
@@ -25,14 +26,12 @@ class MainActivity : AppCompatActivity() {
             adapter.addItem(adapter.itemCount + 1)
         }
 
-        if(savedInstanceState != null)
-        {
+        if(savedInstanceState != null) {
             val n = savedInstanceState.getInt("size")
             for (i in 1..n) {
                 adapter.addItem(i)
             }
         }
-        //adapter.setItems(listOf(1, 2, 3))
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

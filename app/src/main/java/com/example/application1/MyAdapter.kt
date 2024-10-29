@@ -6,7 +6,8 @@ import androidx.recyclerview.widget.RecyclerView
 
 class MyAdapter() : RecyclerView.Adapter<MyViewHolder>() {
 
-    private val items = ArrayList<Int>()
+    private var items = ArrayList<Int>()
+    private var deletedItems = ArrayDeque<Int>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         return MyViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.recyclerview_item, parent, false))
@@ -17,16 +18,32 @@ class MyAdapter() : RecyclerView.Adapter<MyViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.bind(items[position]);
+        holder.bind(this, items[position])
     }
 
-    fun setItems(list : List<Int>) {
-        items.addAll(list)
-        notifyDataSetChanged()
+    private fun isDeleted(): Boolean {
+        if (deletedItems.size > 0) {
+            return true
+        }
+        else {
+            return false
+        }
+    }
+
+    fun deleteItem(item : Int) {
+        deletedItems.addLast(item)
+        val index = items.indexOf(item)
+        items.remove(item)
+        notifyItemRangeRemoved(index, 1)
     }
 
     fun addItem(item : Int) {
-        items.add(item)
+        if (isDeleted()) {
+            items.add(deletedItems.removeFirst())
+        }
+        else {
+            items.add(item)
+        }
         notifyItemRangeChanged(item, 1)
     }
 }
